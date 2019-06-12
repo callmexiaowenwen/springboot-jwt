@@ -26,13 +26,11 @@ public class SysAspect {
 
     }
 
-    ThreadLocal<Long> startTime = new ThreadLocal<Long>();
-
     @Around("log()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        startTime.set(System.currentTimeMillis());
+        long startTime = System.currentTimeMillis();
         Object proceed = joinPoint.proceed();
-        long costTime = System.currentTimeMillis() - startTime.get();
+        long costTime = System.currentTimeMillis() - startTime;
         if (costTime > 200) {
             Signature signature = joinPoint.getSignature();
             String methodName = signature.getDeclaringTypeName() + "." + signature.getName();
